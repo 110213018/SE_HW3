@@ -3,7 +3,7 @@ require('dbconfig.php');
 
 function getJobList() {
 	global $db;
-	$sql = "select * from shop;";
+	$sql = "select * from shop where 1;";
 	$stmt = mysqli_prepare($db, $sql ); //precompile sql指令，建立statement 物件，以便執行SQL
 	mysqli_stmt_execute($stmt); //執行SQL
 	$result = mysqli_stmt_get_result($stmt); //取得查詢結果
@@ -15,34 +15,34 @@ function getJobList() {
 	return $rows;
 }
 
-function addJob($goodName,$goodContent,$price,$buyNum,$totalPrice,$goodID) {
+function addJob($goodsName,$goodsContent,$price,$buyNum, $totalPrice, $totalQuantity, $goodsID, $Quantity) {
 	global $db;
-	if($goodID>0) {
-		$sql = "update todo set goodName=?, goodContent=?, price=?, buyNum=?, totalPrice=? where goodID=?"; //SQL中的 ? 代表未來要用變數綁定進去的地方
+	if($goodsID>0) {
+		$sql = "update shop set goodsName=?, goodsContent=?, price=?, buyNum=?, totalPrice=?, totalQuantity=?, Quantity=? where id=?"; //SQL中的 ? 代表未來要用變數綁定進去的地方
 		$stmt = mysqli_prepare($db, $sql); //prepare sql statement
-		mysqli_stmt_bind_param($stmt, "ssiii", $goodName, $goodContent, $price, $buyNum, $totalPrice); //bind parameters with variables, with types "sss":string, string ,string
+		mysqli_stmt_bind_param($stmt, "ssiiiiii", $goodsName, $goodsContent, $price, $buyNum, $totalPrice, $totalQuantity, $Quantity, $goodsID);
 	} else {
-		$sql = "insert into todo (goodName, goodContent, price, buyNum, totalPrice) values (?, ?, ?, ?, ?)"; //SQL中的 ? 代表未來要用變數綁定進去的地方
+		$sql = "insert into shop (goodsName, goodsContent, price, totalQuantity) values (?, ?, ?, ?)"; //SQL中的 ? 代表未來要用變數綁定進去的地方
 		$stmt = mysqli_prepare($db, $sql); //prepare sql statement
-		mysqli_stmt_bind_param($stmt, "ssiii", $goodName, $goodContent, $price, $buyNum, $totalPrice); //bind parameters with variables, with types "sss":string, string ,string
+		mysqli_stmt_bind_param($stmt, "ssii", $goodsName, $goodsContent, $price, $totalQuantity);
 	}
 	mysqli_stmt_execute($stmt);  //執行SQL
 	return True;
 }
 
 /* update 的備用方案
-function updateJob($goodID, $goodName, $goodContent, $price, $buyNum, $totalPrice) {
-	echo $goodID, $goodName, $goodContent, $price, $buyNum, $totalPrice;
+function updateJob($goodsID, $goodsName, $goodsContent, $price, $buyNum, $totalPrice) {
+	echo $goodsID, $goodsName, $goodsContent, $price, $buyNum, $totalPrice;
 	return;
 }
 */
 
-function delJob($goodID) {
+function delJob($goodsID) {
 	global $db;
 
-	$sql = "delete from todo where goodID=?;"; //SQL中的 ? 代表未來要用變數綁定進去的地方
+	$sql = "delete from shop where id=?;"; //SQL中的 ? 代表未來要用變數綁定進去的地方
 	$stmt = mysqli_prepare($db, $sql); //prepare sql statement
-	mysqli_stmt_bind_param($stmt, "i", $goodID); //bind parameters with variables, with types "sss":string, string ,string
+	mysqli_stmt_bind_param($stmt, "i", $goodsID); //bind parameters with variables, with types "sss":string, string ,string
 	mysqli_stmt_execute($stmt);  //執行SQL
 	return True;
 }

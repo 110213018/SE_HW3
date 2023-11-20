@@ -20,7 +20,7 @@ case "addJob":
 	// Load Add Form 的button 是setAddUI 之前老師的todoView.html 程式碼的 最上面和最下面
 	$jsonStr = $_POST['dat'];
 	$job = json_decode($jsonStr);
-	addJob($job->goodName, $job->goodContent, $job->price, $job->buyNum, $job->totalPrice, $job->goodID);
+	addJob($job->goodsName, $job->goodsContent, $job->price, $job->buyNum, $job->totalPrice, $job->totalQuantity, $job->id, $job->Quantity);
 	return;
 
 /* update 的備用方案
