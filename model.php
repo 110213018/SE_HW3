@@ -46,4 +46,33 @@ function delJob($goodsID) {
 	mysqli_stmt_execute($stmt);  //執行SQL
 	return True;
 }
+function gettotal($goodsID) {
+	global $db;
+
+	$sql = "select sum(price * buyNum) as total from shop where id = ?;"; //SQL中的 ? 代表未來要用變數綁定進去的地方
+	$stmt = mysqli_prepare($db, $sql); //prepare sql statement
+	mysqli_stmt_bind_param($stmt, "i", $goodsID); //bind parameters with variables, with types "sss":string, string ,string
+	mysqli_stmt_execute($stmt);
+	  //執行SQL
+	$result = mysqli_stmt_get_result($stmt);
+	if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
+    }
+
+    return 0;
+}
+function checkout() {
+    global $db;
+
+    $sql = "select sum(price * buyNum) from shop";
+    $stmt = mysqli_prepare($db, $sql);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    if ($result && $row = mysqli_fetch_assoc($result)) {
+        return $row['total'];
+    }
+
+    return 0;
+}
 ?>
