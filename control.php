@@ -2,7 +2,7 @@
 require('model.php');
 
 /* 
-需要有這幾個變數: goodName, goodContent, price, buyNum, totalPrice, goodID
+需要有這幾個變數: goodName, goodContent, price, buyNum, totalPrice, goodsID
 (buyer)買方html界面: 需要設計輸入等的資料在欄位
 (seller)賣方html界面: 需要設計以上的變數
 */
@@ -25,13 +25,13 @@ case "addJob":
 
 /* update 的備用方案
 case "updateJob":
-    $id=(int)$_REQUEST['goodID'];
+    $id=(int)$_REQUEST['id'];
     updateJob($id);
     return;
 */
 
 case "delJob":
-	$id=(int)$_REQUEST['goodID']; //$_GET, $_REQUEST
+	$id=(int)$_REQUEST['id']; //$_GET, $_REQUEST
 	delJob($id);
 	return;
 default:
