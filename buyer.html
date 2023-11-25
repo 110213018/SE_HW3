@@ -1,4 +1,3 @@
-買家頁面
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,14 +11,14 @@
         <div id="list" v-if="UI == 'main'">
             <h1>商品列表</h1>
             <table border="1">
-                <tr><td>編號</td><td>商品名稱</td><td>商品說明</td><td>單價</td><td>數量</td><td>總價</td><td>刪除</td></tr>
-                <tr v-for="shop in dat">
-                    <td>{{ shop.id }}</td>
-                    <td>{{ shop.goodName }}</td>
-                    <td>{{ shop.goodContent }}</td>
-                    <td>{{ shop.price }}</td>
-                    <td>{{ shop.buyNum }}</td>
-                    <td>{{ shop.totalPrice }}</td>
+                <tr><td>編號</td><td>商品名稱</td><td>商品說明</td><td>單價</td><td>數量</td><td>總價</td><td>購買</td></tr>
+                <tr v-for="job in dat">
+                    <td>{{ job.id }}</td>
+                    <td>{{ job.goodName }}</td>
+                    <td>{{ job.goodContent }}</td>
+                    <td>{{ job.price }}</td>
+                    <td>{{ job.buyNum }}</td>
+                    <td>{{ job.totalPrice }}</td>
                     <td><button @click="addToCart()">加入購物車</button></td>
                 </tr>
             </table>
@@ -31,13 +30,13 @@
             <button @click="loadList()">回商品主頁</button>
             <table border="1">
                 <tr><td>編號</td><td>商品名稱</td><td>數量</td><td>單價</td><td>總價</td><td>移除</td></tr>
-                <tr v-for="shop in cart">
-                    <td>{{ shop.id }}</td>
-                    <td>{{ shop.goodName }}</td>
-                    <td>{{ shop.Quantity }}</td>
-                    <td>{{ shop.price }}</td>
-                    <td>{{ shop.totalPrice }}</td>
-                    <td><button @click="removeFromCart(shop.id)">移除</button></td>
+                <tr v-for="job in cart">
+                    <td>{{ job.id }}</td>
+                    <td>{{ job.goodName }}</td>
+                    <td>{{ job.Quantity }}</td>
+                    <td>{{ job.price }}</td>
+                    <td>{{ job.totalPrice }}</td>
+                    <td><button @click="removeFromCart(job.id)">移除</button></td>
 
                 </tr>
             </table>
@@ -63,6 +62,7 @@
                 };
             },
             methods: {
+
                 loadList: function () {
                     this.UI = 'main';
                     this.loadProducts(); // Load product data from PHP backend
@@ -78,7 +78,7 @@
                     let mydat = new FormData();
                     mydat.append( "dat", JSON.stringify(this.newJob) );
 
-                    let url="todoControl.php?act=addJob";
+                    let url="Control.php?act=addJob";
                     fetch(url,{
                         method: 'POST',
                         body: mydat // 將表單物件放入fetch的body屬性
@@ -89,13 +89,10 @@
                         that.setUI('main');
                         that.loadList();
                     })
-                },
-                // removeFromCart: function (productId) {
-                //     // Implement logic to remove product from cart
-                // },
+                },a
                 removeFromCart: function (id) {
                     const that=this;
-                    let url="todoControl.php?act=delJob&id="+id;
+                    let url="Control.php?act=delJob&id="+id;
                     fetch(url,{
                         method: 'POST'
                     })
@@ -107,7 +104,7 @@
                 },
                 loadProducts: function () {
                     const that = this;
-                    fetch('todoControl.php?act=listJob')
+                    fetch('Control.php?act=listJob')
                         .then(function(response) {
                             return response.json();
                         })
@@ -117,7 +114,7 @@
                 },
                 gettotal: function () {
                     const that = this;
-                    fetch('todoControl.php?act=gettotal')
+                    fetch('Control.php?act=gettotal')
                         .then(function(response) {
                             return response.json();
                         })
@@ -127,7 +124,7 @@
                 },
                 checkout: function () {
                     const that = this;
-                    fetch('todoControl.php?act=checkout')
+                    fetch('Control.php?act=checkout')
                         .then(function(response) {
                             return response.json();
                         })
