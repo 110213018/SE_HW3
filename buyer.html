@@ -1,3 +1,4 @@
+買家頁面
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,15 +12,15 @@
         <div id="list" v-if="UI == 'main'">
             <h1>商品列表</h1>
             <table border="1">
-                <tr><td>序號</td><td>商品名稱</td><td>商品介紹</td><td>商品價格</td><td>總庫存</td><td>庫存剩餘數量</td><td>購買</td></tr>
+                <tr><td>編號</td><td>商品名稱</td><td>商品介紹</td><td>價格</td><td>購買數量</td><td>總價</td><td>購買</td></tr>
                 <tr v-for="job in dat">
                     <td>{{ job.id }}</td>
-                    <td>{{ job.goodName }}</td>
-                    <td>{{ job.goodContent }}</td>
+                    <td>{{ job.goodsName }}</td>
+                    <td>{{ job.goodsContent }}</td>
                     <td>{{ job.price }}</td>
                     <td>{{ job.buyNum }}</td>
                     <td>{{ job.totalPrice }}</td>
-                    <td><button @click="addToCart()">加入購物車</button></td>
+                    <td><button @click="addToCart(job.id)">加入購物車</button></td>
                 </tr>
             </table>
             <button @click="loadCart()">查看購物車</button>
@@ -32,8 +33,8 @@
                 <tr><td>編號</td><td>商品名稱</td><td>數量</td><td>單價</td><td>總價</td><td>移除</td></tr>
                 <tr v-for="job in cart">
                     <td>{{ job.id }}</td>
-                    <td>{{ job.goodName }}</td>
-                    <td>{{ job.Quantity }}</td>
+                    <td>{{ job.goodsName }}</td>
+                    <td>{{ job.buyNum }}</td>
                     <td>{{ job.price }}</td>
                     <td>{{ job.totalPrice }}</td>
                     <td><button @click="removeFromCart(job.id)">移除</button></td>
@@ -62,31 +63,31 @@
                 };
             },
             methods: {
-
                 loadList: function () {
                     this.UI = 'main';
                     this.loadProducts(); // Load product data from PHP backend
                 },
                 loadCart: function () {
                     this.UI = 'cart';
+                    this.loadProducts_Cart();
                 },
                 // addToCart: function (product) {
                 //     // Implement logic to add product to cart
                 // },
-                addToCart: function () {
+                addToCart: function (id) {
                     const that=this;
-                    let mydat = new FormData();
-                    mydat.append( "dat", JSON.stringify(this.newJob) );
+                    // let mydat = new FormData();
+                    // mydat.append( "dat", JSON.stringify(this.newJob) );
 
-                    let url="Control.php?act=addJob";
+                    let url="control.php?act=addCart&id="+id;
                     fetch(url,{
-                        method: 'POST',
-                        body: mydat // 將表單物件放入fetch的body屬性
+                        method: 'POST'
+                        // body: mydat // 將表單物件放入fetch的body屬性
                     })
                     .then(function(res){return res.text(); }) //取得傳回值，轉為文字
                     .then(function(data){ 
                         console.log(data);
-                        that.setUI('main');
+                        // that.setUI('main');
                         that.loadList();
                     })
                 },
@@ -95,7 +96,7 @@
                 // },
                 removeFromCart: function (id) {
                     const that=this;
-                    let url="Control.php?act=delJob&id="+id;
+                    let url="control.php?act=delJob_Cart&id="+id;
                     fetch(url,{
                         method: 'POST'
                     })
@@ -107,17 +108,30 @@
                 },
                 loadProducts: function () {
                     const that = this;
-                    fetch('Control.php?act=listJob')
+                    fetch('control.php?act=listJob')
                         .then(function(response) {
                             return response.json();
                         })
                         .then(function(myJson) {
+                            console.log(myJson);
                             that.dat = myJson;
+                        });
+                },
+                loadProducts_Cart: function () {
+                    const that = this;
+                    fetch('control.php?act=listCart')
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(myJson) {
+                            console.log(myJson);
+                            that.cart = myJson;
+                            // console.log(that.cart);
                         });
                 },
                 gettotal: function () {
                     const that = this;
-                    fetch('Control.php?act=gettotal')
+                    fetch('control.php?act=gettotal')
                         .then(function(response) {
                             return response.json();
                         })
@@ -127,18 +141,20 @@
                 },
                 checkout: function () {
                     const that = this;
-                    fetch('Control.php?act=checkout')
+                    fetch('control.php?act=checkout');
                         // .then(function(response) {
                         //     return response.json();
                         // })
                         // .then(function(myJson) {
-                        //     that.dat = myJson;
+                        //     that.cart = myJson;
                         // });
+                    that.cart = [];
                 },
 
             },
             created() {
                 this.loadProducts();
+                this.loadProducts_Cart();
             },
         }).mount("#main");
     </script>
