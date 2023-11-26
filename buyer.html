@@ -11,7 +11,7 @@
         <div id="list" v-if="UI == 'main'">
             <h1>商品列表</h1>
             <table border="1">
-                <tr><td>編號</td><td>商品名稱</td><td>商品說明</td><td>單價</td><td>數量</td><td>總價</td><td>購買</td></tr>
+                <tr><td>序號</td><td>商品名稱</td><td>商品介紹</td><td>商品價格</td><td>總庫存</td><td>庫存剩餘數量</td><td>購買</td></tr>
                 <tr v-for="job in dat">
                     <td>{{ job.id }}</td>
                     <td>{{ job.goodName }}</td>
@@ -89,7 +89,10 @@
                         that.setUI('main');
                         that.loadList();
                     })
-                },a
+                },
+                // removeFromCart: function (productId) {
+                //     // Implement logic to remove product from cart
+                // },
                 removeFromCart: function (id) {
                     const that=this;
                     let url="Control.php?act=delJob&id="+id;
@@ -125,12 +128,12 @@
                 checkout: function () {
                     const that = this;
                     fetch('Control.php?act=checkout')
-                        .then(function(response) {
-                            return response.json();
-                        })
-                        .then(function(myJson) {
-                            that.dat = myJson;
-                        });
+                        // .then(function(response) {
+                        //     return response.json();
+                        // })
+                        // .then(function(myJson) {
+                        //     that.dat = myJson;
+                        // });
                 },
 
             },
