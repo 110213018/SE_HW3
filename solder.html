@@ -17,7 +17,7 @@
 			<td>{{job.price}}</td>
 			<td>{{job.totalQuantity}}</td>
 			<td>{{job.Quantity}}</td>
-			<td><button @click="delJob(job.id)">刪</button></td>
+			<td><button @click="delJob(job.id)">刪除</button><button @click="setEditUI(job)">修改</button></td>
 		</tr>
 	</table>
 </div>
@@ -78,6 +78,10 @@ const shopApp= Vue.createApp({
 				console.log(data);
 				that.loadList();
 			})
+		},
+		setEditUI: function(job) {
+			this.newJob=job;
+			this.setUI('addForm');
 		},
 		addJob: function () {
 			const that=this;
