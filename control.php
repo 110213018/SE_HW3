@@ -66,6 +66,10 @@ case "checkout":
 	// $id=(int)$_REQUEST['goodID'];
 	checkout();
 	return;	
+case "rateProducts":
+	$id=(int)$_REQUEST['goodID'];
+	rateProducts($id,$rating)
+	return;
 default:
   
 }
