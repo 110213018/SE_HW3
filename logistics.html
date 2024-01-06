@@ -22,6 +22,24 @@
             <p>感謝您選擇我們運送，期待再次為您服務。</p>
 
         </div>
+        <div v-else-if="UI == 'bought_products'">
+            <h1>已結帳清單</h1>
+            <button @click="loadList()">回商品主頁</button>
+            <table border="1">
+                <tr><td>編號</td><td>商品名稱</td><td>數量</td><td>單價</td><td>總價</td><td>運送狀況</td></tr>
+                <tr v-for="job in cart">
+                    <td>{{ job.id }}</td>
+                    <td>{{ job.goodsName }}</td>
+                    <td>{{ job.buyNum }}</td>
+                    <td>{{ job.price }}</td>
+                    <td>{{ job.totalPrice }}</td>
+                    <td>{{ job.orderStatus }}</td>
+                    <td>
+                    <button v-if="UI === 'bought_products' && job.orderStatus === 'delivered'" @click="rateProduct(job.id)">評分</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
 </div>
 
     <script>
