@@ -99,16 +99,36 @@ function gettotal($goodsID) {
 function checkout() {
     global $db;
 
-    // $sql = "select sum(price * buyNum) from shop1";
-    $sql = "update shop set buyNum=0, totalPrice=0 where 1;";
+    $sql = "select sum(price * buyNum) from shop1";
+    
 	$stmt = mysqli_prepare($db, $sql);
     mysqli_stmt_execute($stmt);
 
     $result = mysqli_stmt_get_result($stmt);
     if ($result && $row = mysqli_fetch_assoc($result)) {
         return $row['total'];
+
     }
+    $sql = "update shop set buyNum=0, totalPrice=0 where 1;";
 
     return 0;
+}
+function rateProduct($productId, $rating) {
+    global $db;
+    $sql = "UPDATE shop SET rating = ? WHERE id = ?";
+    $stmt = mysqli_prepare($db, $sql);
+    mysqli_stmt_bind_param($stmt, "ii", $rating, $productId);
+    mysqli_stmt_execute($stmt);
+    return true;
+}
+function updateOrderStatus($orderId, $newStatus) {
+    global $db;
+
+    $sql = "UPDATE orders SET orderStatus=? WHERE orderId=?";
+    $stmt = mysqli_prepare($db, $sql);
+    mysqli_stmt_bind_param($stmt, "si", $newStatus, $orderId);
+    mysqli_stmt_execute($stmt);
+
+    return true;
 }
 ?>
