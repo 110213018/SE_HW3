@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="https://unpkg.com/vue@3.0.11"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div v-if="orderStatus === 'pending'">
+            <h1>訂單狀態: 待處理</h1>
+            <button @click="processOrder()">處理訂單</button>
+        </div>
+
+        <div v-else-if="orderStatus === 'shipped'">
+            <h1>訂單狀態: 已寄送</h1>
+            <button @click="deliverOrder()">訂單已送達</button>
+        </div>
+
+        <div v-else-if="orderStatus === 'delivered'">
+            <h1>訂單狀態: 已送達</h1>
+            <p>感謝您選擇我們運送，期待再次為您服務。</p>
+
+        </div>
+    </div>
+
+    <script>
+        const status = Vue.createApp({
+            data() {
+                return {
+                    orderStatus: 'pending'
+                };
+            },
+            methods: {
+                processOrder:function() {
+                    this.UI = 'bought_products';
+                    this.updateOrderStatus = 'shipped';
+                },
+                deliverOrder:function(){
+                    this.UI = 'bought_products';
+                    this.updateOrderStatus ='delivered';
+                }
+                updateOrderStatus: function(newStatus) {
+                    this.orderStatus = newStatus;
+                }
+            }
+        }).mount("#main");
+    </script>
+</body>
+</html>
