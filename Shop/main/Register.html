@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <meta charset="UTF-8"> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    
+    <!-- vue 庫調用 -->
+    <script type="text/javascript" src="https://unpkg.com/vue"></script>
+    <!-- css 調用 -->
+    <link rel="stylesheet" href="./css/Default.css">
+    <link rel="stylesheet" href="./css/Register.css">
+    <!-- js 調用 -->
+    <!-- <script src="./js/Default.js"></script> -->
+</head>
+<body>
+    <div id="Main">
+        <div id="Customer_Register" class="Main_Box" v-if="UI=='Customer'">
+            <div class="Header">
+                <div class="Header_Logo">
+                    <a href="./Home.html">
+                        <img src="../public/image/Logo1.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="Content">
+                <hr>  
+                <p>客戶註冊</p>
+                <div>
+                    名稱: <input type="text"  v-model="Customer_Data.Name"/> <br/>
+                
+                    性別: <textarea v-model="Customer_Data.Sex"></textarea><br>
+
+                    密碼: <input type="password" v-model="Customer_Data.Password"/> <br/>
+
+                    確認密碼: <input type="password" v-model="Customer_Data.Password_Comfirm"/> <br/>
+
+                
+                    <button @click="Customer_Register()">save</button>
+                </div>
+            </div>
+            <div class="Footer"></div>
+        </div>
+
+        <div id="Merchant_Register" class="Main_Box" v-if="UI=='Merchant'">
+            <div class="Header">
+                <div class="Header_Logo">
+                    <a href="./Home.html">
+                        <img src="../public/image/Logo1.png" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="Content">
+                <hr>  
+                <p>商家註冊</p>
+                <div>
+                    名稱: <input type="text"  v-model="Merchant_Data.Name"/> <br/>
+                
+                    密碼: <input type="password" v-model="Merchant_Data.Password"><br>
+
+                    確認密碼: <input type="password" v-model="Merchant_Data.Password_Comfirm"><br>
+                
+                    <button @click="Merchant_Register()">save</button>
+                </div>
+            </div>
+            <div class="Footer"></div>
+        </div>
+    </div>
+
+    
+    <!-- vue -->
+    <script>
+        const todoApp = Vue.createApp({
+            data() {
+                return {
+                    UI: "",
+                    Data_Now: "",
+                    Customer_Data: {
+			        	Name: '',
+                        Register_Time: "",
+			        	Sex: '',
+                        Password: "",
+                        Password_Comfirm: ""
+			        },
+                    Merchant_Data: {
+			        	Name: '',
+                        Register_Time: "",
+                        Password: "",
+                        Password_Comfirm: ""
+			        }
+                };
+            },
+            methods: {
+                GetCurrentTime: function() {
+                    // 獲取註冊時間
+                    let Date_Now = new Date();
+                    this.Date_Now = Date_Now;
+                },
+                Check_Password: function(User) {
+                    if(User.Password === User.Password_Comfirm) {
+                        return true;
+                    }
+                    return false;
+                },
+                Customer_Register: function() {
+                    if(this.Check_Password(this.Customer_Data)) {
+                        this.GetCurrentTime();  // 獲取註冊時間
+                        this.Customer_Data.Register_Time = this.Date_Now;
+                        let mydat = new FormData();
+                        mydat.append( "Form", JSON.stringify(this.Customer_Data) );
+    
+                        let url="../control/Register.php?User=Customer";
+                        fetch(url,{
+                            method: 'POST',
+                            body: mydat
+                        })
+                        .then(function(res){
+                            return res.text(); 
+                        }) //取得傳回值，轉為文字
+                        .then(function(data) {
+                            console.log(data);
+                            var Tips = alert("註冊成功");
+                            // if(Tips) {
+                                window.location.href = "./Home.html";
+                            // }
+                        })
+                    }
+                    else {
+                        alert("密碼不同");
+                    }
+                },
+                Merchant_Register: function() {
+                    if(this.Check_Password(this.Merchant_Data)) {
+                        this.GetCurrentTime();  // 獲取註冊時間
+                        this.Merchant_Data.Register_Time = this.Date_Now;
+                        let mydat = new FormData();
+                         mydat.append( "Form", JSON.stringify(this.Merchant_Data) );
+    
+                        let url="../control/Register.php?User=Merchant";
+                        fetch(url,{
+                            method: 'POST',
+                            body: mydat
+                        })
+                        .then(function(res){
+                            return res.text(); 
+                        }) //取得傳回值，轉為文字
+                        .then(function(data) {
+                            console.log(data);
+                            var Tips = alert("註冊成功");
+                            window.location.href = "./Home.html";
+                        })
+                    }
+                    else {
+                        alert("密碼不同");
+                    }
+                },
+            },
+            watch: {},
+            created() {
+                // 初始化
+                var Location = window.location.search.substring(1);
+                var Location_GET = Location.split("&");
+                for(var num=0; Location_GET.length; num++) {
+                    if(Location_GET[num]) {
+                        // console.log(Location_GET[num].split("="));
+                        var Pair = Location_GET[num].split("=");
+                        if(Pair[0] == "User") {
+                            this.UI = Pair[1];
+                        }
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+        }).mount("#Main");;
+    </script>
+</body>
+</html>

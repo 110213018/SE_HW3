@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <meta charset="UTF-8"> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    
+    <!-- vue 庫調用 -->
+    <script type="text/javascript" src="https://unpkg.com/vue"></script>
+    <!-- css 調用 -->
+    <link rel="stylesheet" href="./css/Default.css">
+    <link rel="stylesheet" href="./css/Home.css">
+    <!-- js 調用 -->
+    <!-- <script src="./js/Default.js"></script> -->
+</head>
+<body>
+    <div id="Main">
+        <div class="Header">
+            <div class="Header_Logo">
+                <a href="./Home.html">
+                    <img src="../public/image/Logo1.png" alt="">
+                </a>
+            </div>
+            <div class="Header_List">
+                <ul>
+                    <li v-if="U_Id === 'None'" v-for="(value, index) in Header_List">
+                        <a :href="value.Target">{{ value.Name }}</a>
+                    </li>
+                    <li v-else="U_Id">
+                        {{ User_Information.Name }} 歡迎回來
+                        <button @click="LogOut()">登出</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Content">
+            <hr/>
+        </div>
+        <div class="Footer">
+            <div style="height: 20px;">eihei</div>
+        </div>
+    </div>
+
+    
+    <!-- vue -->
+    <script>
+        const todoApp = Vue.createApp({
+            data() {
+                return {
+                    U_Id: "None",
+                    // Show: true,
+                    User_Information: {},
+                    Header_List: [
+                        {
+                            Name: "客戶登錄",
+                            Target: "./Login.html?User=Customer"
+                        },
+                        {
+                            Name: "商家登錄",
+                            Target: "./Login.html?User=Merchant"
+                        }
+                    ]
+                };
+            },
+            methods: {
+                User_Login: function() {
+                    // is Login
+                    const that = this;
+                    // let U_In = "";
+                    let url = "../control/Login.php?User=Is_Login";
+                    fetch(url, {
+                        method: "GET"
+                    })
+                    .then(function(res) {
+                        return res.text();
+                    })
+                    .then(function(data) {
+                        if(data) {
+                            console.log(data);
+                            let U_In = JSON.parse(data);
+                            that.User_Information = U_In;
+                            that.U_Id = U_In.Id;
+                        }
+                        else {
+                            console.log("No_User");
+                        }
+                    })
+                },
+                LogOut: function() {
+                    fetch("../control/Login.php?User=LogOut&U_Id="+this.U_Id, {
+                        methods: "POST"
+                    })
+                    .then((res) => {
+                        return res.text();
+                    })
+                    .then((data) => {
+                        console.log(data);
+                        this.U_Id = "None";
+                    })
+                },
+                Check: function() {
+                    console.log(this.User_Information);
+                }
+            },
+            watch: {},
+            created() {
+                this.User_Login();
+            }
+        }).mount("#Main");
+    </script>
+</body>
+</html>

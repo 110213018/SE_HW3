@@ -1,0 +1,83 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    --Default_color: black;
+}
+html {
+    min-height: 100%;
+    color: black;
+}
+body {
+    min-height: 100%;
+    background-color: #f6f6f6;
+}
+a {
+    text-decoration: none;
+    color: var(--Default_color);
+}
+#Main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* background-color: pink; */
+}
+hr {
+    border: 5px solid #96b97d;
+}
+
+/* 結構 */
+.Header, .Content, .Footer {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+.Main_Box {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.Header {
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    /* background-color: grey; */
+}
+.Content {
+    min-height: 500px;
+    /* background-color: #96b97d; */
+    background-color: #f9f9f9;
+}
+.Footer {
+    flex-grow: 1;
+    align-items: flex-end;
+    height: auto;
+    background-color: lightgrey;
+}
+
+/* Header */
+.Header_Logo {
+    margin: 0 5% 0 10px;
+    height: 100%;
+    /* background-color: yellowgreen; */
+}
+img {
+    transform: translateY(10%);
+    height: 80%;
+}
+.Header_List {
+    flex-grow: 1;
+    /* background-color: yellowgreen; */
+}
+.Header_List ul {
+    height: 100%;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    
+}
+.Header_List ul li {
+    margin: 0 30px 0 0;
+    font-size: 20px;
+}

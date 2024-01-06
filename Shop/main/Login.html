@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <meta charset="UTF-8"> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    
+    <!-- vue 庫調用 -->
+    <script type="text/javascript" src="https://unpkg.com/vue"></script>
+    <!-- css 調用 -->
+    <link rel="stylesheet" href="./css/Default.css">
+    <!-- js 調用 -->
+    <!-- <script src="./js/Default.js"></script> -->
+</head>
+<body>
+    <div id="Main">
+        <div id="Customer_Login" class="Main_Box" v-if="UI=='Customer'">
+            <div class="Header">
+                <div class="Header_Logo">
+                    <a href="./Home.html">
+                        <img src="../public/image/Logo1.png" alt="">
+                    </a>
+                </div>
+                <div class="Header_List"></ul>
+                </div>
+            </div>
+            <div class="Content">
+                <hr>
+                <a href="./Register.html?User=Customer">註冊</a>
+                <p>客戶登錄</p>
+                <div>
+                    名稱: <input type="text"  v-model="User_Data.Name"/> <br/>
+                    
+                    密碼: <input type="password" v-model="User_Data.Password"/> <br/>
+    
+                    <button @click="User_Login('Customer')">save</button>
+                </div>
+            </div>
+            <div class="Footer"></div>
+        </div>
+
+        <div id="Merchant_Login" class="Main_Box" v-if="UI=='Merchant'">
+            <div class="Header">
+                <div class="Header_Logo">
+                    <a href="./Home.html">
+                        <img src="../public/image/Logo1.png" alt="">
+                    </a>
+                </div>
+                <div class="Header_List"></ul>
+                </div>
+            </div>
+            <div class="Content">
+                <hr>
+                <a href="./Register.html?User=Merchant">註冊</a>
+                <p>商家登錄</p>
+                <div>
+                    名稱: <input type="text"  v-model="User_Data.Name"/> <br/>
+                    
+                    密碼: <input type="password" v-model="User_Data.Password"/> <br/>
+    
+                    <button @click="User_Login('Merchant')">save</button>
+                </div>
+            </div>
+            <div class="Footer"></div>
+        </div>
+    </div>
+
+    
+    <!-- vue -->
+    <script>
+        const todoApp = Vue.createApp({
+            data() {
+                return {
+                    UI: "",
+                    User_Data: {
+                        Name: "",
+                        Password: ""
+                    }
+                };
+            },
+            methods: {
+                User_Login: function(User) {
+                    let Data = new FormData();
+                    Data.append("Form", JSON.stringify(this.User_Data));
+
+                    let url = "../control/Login.php?User=" + User;
+                    fetch(url, {
+                        method: 'POST',
+                        body: Data
+                    })
+                    .then(function(res){
+                        return res.text(); 
+                    })
+                    .then(function(data) {
+                        console.log(data); 
+                        // 登錄失敗
+                        if(data.substring(0,1) == "0") {
+                            alert(data.substring(1));
+                        }
+                        else {
+                            // console.log(data);
+                            window.location.href = "./Home.html";
+                        }
+                    })  
+                }
+            },
+            watch: {},
+            created() {
+                // 初始化
+                var Location = window.location.search.substring(1);
+                var Location_GET = Location.split("&");
+                for(var num=0; Location_GET.length; num++) {
+                    if(Location_GET[num]) {
+                        // console.log(Location_GET[num].split("="));
+                        var Pair = Location_GET[num].split("=");
+                        if(Pair[0] == "User") {
+                            this.UI = Pair[1];
+                        }
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+        }).mount("#Main");;
+    </script>
+</body>
+</html>
