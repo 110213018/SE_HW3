@@ -34,9 +34,6 @@
                     <td>{{ job.price }}</td>
                     <td>{{ job.totalPrice }}</td>
                     <td>{{ job.orderStatus }}</td>
-                    <td>
-                    <button v-if="UI === 'bought_products' && job.orderStatus === 'delivered'" @click="rateProduct(job.id)">評分</button>
-                    </td>
                 </tr>
             </table>
         </div>
