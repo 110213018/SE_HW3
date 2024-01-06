@@ -33,7 +33,8 @@ CREATE TABLE `shop` (
   `goodsContent` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `price` int(10) NOT NULL,
   `buyNum` int(10) NOT NULL,
-  `totalPrice` int(10) NOT NULL
+  `totalPrice` int(10) NOT NULL,
+   `rating` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 COMMIT;
 
