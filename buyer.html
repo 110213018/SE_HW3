@@ -41,7 +41,27 @@
 
                 </tr>
             </table>
-            <td><button @click="checkout()">結帳</button></td>
+            <td><button @click="loadBoughtprod()">結帳</button></td>
+        </div>
+        <!-- </div> -->
+
+        <div v-if="UI == 'bought_products'">
+            <h1>已結帳清單</h1>
+            <button @click="loadList()">回商品主頁</button>
+            <table border="1">
+                <tr><td>編號</td><td>商品名稱</td><td>數量</td><td>單價</td><td>總價</td><td>運送狀況</td></tr>
+                <tr v-for="job in cart">
+                    <td>{{ job.id }}</td>
+                    <td>{{ job.goodsName }}</td>
+                    <td>{{ job.buyNum }}</td>
+                    <td>{{ job.price }}</td>
+                    <td>{{ job.totalPrice }}</td>
+                    <td>{{ job.orderStatus }}</td>
+                    <td>
+                    <button v-if="UI === 'bought_products' && job.orderStatus === 'delivered'" @click="rateProduct(job.id)">評分</button>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -71,9 +91,10 @@
                     this.UI = 'cart';
                     this.loadProducts_Cart();
                 },
-                // addToCart: function (product) {
-                //     // Implement logic to add product to cart
-                // },
+                loadBoughtprod: function () {
+                    this.UI = 'bought_products';
+                    this.loadProducts_Bought_products(); // Load product data from PHP
+                },
                 addToCart: function (id) {
                     const that=this;
                     // let mydat = new FormData();
@@ -129,6 +150,18 @@
                             // console.log(that.cart);
                         });
                 },
+                loadProducts_Bought_products: function () {
+                    const that = this;
+                    fetch('control.php?act=listBought_products')
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(myJson) {
+                            console.log(myJson);
+                            that.cart = myJson;
+                            // console.log(that.cart);
+                        });
+                },
                 gettotal: function () {
                     const that = this;
                     fetch('control.php?act=gettotal')
@@ -141,20 +174,38 @@
                 },
                 checkout: function () {
                     const that = this;
-                    fetch('control.php?act=checkout');
-                        // .then(function(response) {
-                        //     return response.json();
-                        // })
-                        // .then(function(myJson) {
-                        //     that.cart = myJson;
-                        // });
+                    fetch('control.php?act=checkout')
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(myJson) {
+                            that.cart = myJson;
+                        });
                     that.cart = [];
                 },
+                rateProduct: function (productId) {
+                    const that = this;
+                    const rating = prompt('請給商品評分（1-5分）：');
+
+                    if (rating !== null && rating !== '') {
+                        const url = `control.php?act=rateProduct&id=${productId}&rating=${rating}`;
+                        fetch(url, {
+                            method: 'POST'
+                        })
+                        .then(function(res) { return res.text(); })
+                        .then(function(data) {
+                            console.log(data);
+                            // 根据实际情况进行处理，例如刷新数据或更新视图
+                        });
+                    }
+                },
+
 
             },
             created() {
                 this.loadProducts();
                 this.loadProducts_Cart();
+                this.loadProducts_Bought_products()
             },
         }).mount("#main");
     </script>
