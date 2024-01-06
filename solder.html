@@ -9,9 +9,10 @@
 	<h1>Start shopping</h1>
 	<button @click="setAddUI()">新增商品</button>
 	<table border=1>
-		<tr><td>序號</td><td>商品名稱</td><td>商品介紹</td><td>商品價格</td><td>總庫存</td><td>庫存剩餘數量</td><td>-</td></tr>
+		<tr><td>序號</td><td>賣家序號</td><td>商品名稱</td><td>商品介紹</td><td>商品價格</td><td>總庫存</td><td>庫存剩餘數量</td><td>-</td></tr>
 		<tr v-for="job in dat">
 			<td>{{job.id}}</td>
+			<td>{{job.sId}}</td>
 			<td>{{job.goodsName}}</td>
 			<td>{{job.goodsContent}}</td>
 			<td>{{job.price}}</td>
