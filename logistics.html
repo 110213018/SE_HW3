@@ -22,7 +22,8 @@
             <p>感謝您選擇我們運送，期待再次為您服務。</p>
 
         </div>
-    </div>
+    </div> 
+</div>
 
     <script>
         const status = Vue.createApp({
@@ -32,17 +33,31 @@
                 };
             },
             methods: {
-                processOrder:function() {
-                    this.UI = 'bought_products';
-                    this.updateOrderStatus = 'shipped';
+                processOrder: function (id) {
+                    const that = this;
+                    const newStatus = 'shipped';  // 替換為實際的新狀態
+
+                    fetch(`control.php?act=updateOrderStatus&orderId=${id}&newStatus=${newStatus}`)
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(data) {
+                            console.log(data);
+                        });
                 },
-                deliverOrder:function(){
-                    this.UI = 'bought_products';
-                    this.updateOrderStatus ='delivered';
-                }
-                updateOrderStatus: function(newStatus) {
-                    this.orderStatus = newStatus;
-                }
+                deliverOrder: function (id) {
+                    const that = this;  
+                    const newStatus = 'delivered'; 
+
+                    fetch(`control.php?act=updateOrderStatus&orderId=${id}&newStatus=${newStatus}`)
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(data) {
+                            console.log(data);  // 處理後端返回的數據
+                        });
+                },
+
             }
         }).mount("#main");
     </script>
